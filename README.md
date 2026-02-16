@@ -8,6 +8,10 @@ Prediction Output Format
 i believe pramika set up a JSON file for how predictions would get sent
 https://www.canva.com/design/DAG4pUPh-_A/98jDkEkC9qkrWZFNiWIGVg/edit
 
+Sensors
+
+http://canva.com/design/DAG_Fu_jHp8/U7Q-HHgsM6rNJf1nduWNrw/edit
+
 MQTT Topic
 
 will not be getting live data yet
