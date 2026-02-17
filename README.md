@@ -15,3 +15,12 @@ http://canva.com/design/DAG_Fu_jHp8/U7Q-HHgsM6rNJf1nduWNrw/edit
 MQTT Topic
 
 will not be getting live data yet
+a test data set is in the Slack
+
+Create branches as follows:
+
+- ava/ml
+- sanvi/dataingestion
+- ananya/api
+- tanisha/infrastructure
+- pramika/database
