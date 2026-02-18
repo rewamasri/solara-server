@@ -1,1 +1,36 @@
-# define containers
+services:
+  # Database (Local Azure SQL Edge container)
+  azure-sql-edge:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: azure-sql-edge
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrongPassword123!
+    ports:
+      - "1433:1433"
+
+  # MQTT Broker (Eclipse Mosquitto)
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      # Ensure you create the config folder locally or this will error
+      - ./infrastructure/mosquitto/config:/mosquitto/config
+
+  # The API / ML Service (FastAPI)
+  application:
+    build:
+      context: .
+      # Update: changed from /docker/ to /compose/ to match your actual folder
+      dockerfile: infrastructure/compose/Dockerfile 
+    container_name: fastapi-app
+    depends_on:
+      - azure-sql-edge
+      - mosquitto
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mssql+pyodbc://sa:YourStrongPassword123!@azure-sql-edge:1433/master
