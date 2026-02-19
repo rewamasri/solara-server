@@ -8,3 +8,15 @@ docker compose up -d --build
 # chmod +x scripts/deploy.sh
 # to run executable
 # ./deploy.sh
+
+#!/bin/bash
+
+set -e
+
+echo "Pulling latest code..."
+git pull
+
+echo "Building and starting containers..."
+docker compose -f infrastructure/compose/docker-compose.yml up -d --build
+
+echo "Deployment complete."
