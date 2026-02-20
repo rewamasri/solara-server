@@ -17,6 +17,9 @@ MQTT Topic
 will not be getting live data yet
 a test data set is in the Slack
 
+Papalexakis doc: https://docs.google.com/document/d/1_Ps2i-MGEfcOUYO9aAsantR3GI5riLDpk6exeTsaa1c/edit?tab=t.0
+
+
 ML Data Expectations
 - timestamp
 - latitude
