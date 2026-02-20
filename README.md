@@ -17,6 +17,24 @@ MQTT Topic
 will not be getting live data yet
 a test data set is in the Slack
 
+ML Data Expectations
+- timestamp
+- latitude
+- longitude
+- ambient_temp_c
+- surface_temp_avg_c
+- surface_temp_max_c
+- humidity_pct
+- iaq_index
+- lux
+- soil_temp_c
+- soil_moisture_pct
+- soil_ph
+- pitch_deg
+- roll_deg
+- battery_pct
+- power_draw_w
+
 Create branches as follows:
 
 - ava/ml
