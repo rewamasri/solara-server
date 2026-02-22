@@ -1,1 +1,27 @@
-# define containers
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    command: mosquitto -c /mosquitto-no-auth.conf
+
+  azure-sql-edge:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: azure-sql-edge
+    environment:
+      ACCEPT_EULA: "1"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+
+  fastapi:
+    build: ./application
+    container_name: fastapi
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mosquitto
+      - azure-sql-edge
