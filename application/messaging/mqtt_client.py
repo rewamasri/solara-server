@@ -5,9 +5,7 @@ import paho.mqtt.client as mqtt
 import os
 import json
 from dotenv import load_dotenv
-from ml.kmeans import run_kmeans
-from ml.isolation_forest import run_isolation_forest
-from ml.random_forest import run_random_forest
+from ml.inference import predict
 from api.routers.sensors import latest_sensor_data
 from api.routers.predictions import latest_predictions
 
@@ -35,14 +33,12 @@ def on_disconnect(client, userdata, rc):
         print("[MQTT] Unexpected disconnect, will auto-reconnect...", flush=True)
 
 def on_message(client, userdata, msg):
-    # parse JSON
     try:
         payload = json.loads(msg.payload.decode())
     except json.JSONDecodeError as e:
         print("[MQTT] Bad JSON payload, skipping: " + str(e), flush=True)
         return
 
-    # validate required fields
     missing = validate_payload(payload)
     if missing:
         print("[MQTT] Missing required fields: " + str(missing) + ", skipping", flush=True)
@@ -50,36 +46,13 @@ def on_message(client, userdata, msg):
 
     print("[MQTT] Received: " + str(payload), flush=True)
 
-    # run ML with individual error handling
     try:
-        kmeans_result = run_kmeans(payload)
+        result = predict(payload)
+        print("[ML] Result: " + str(result), flush=True)
+        latest_sensor_data.update(payload)
+        latest_predictions.update(result)
     except Exception as e:
-        kmeans_result = {"error": str(e)}
-        print("[ML] KMeans failed: " + str(e), flush=True)
-
-    try:
-        iso_result = run_isolation_forest(payload)
-    except Exception as e:
-        iso_result = {"error": str(e)}
-        print("[ML] Isolation Forest failed: " + str(e), flush=True)
-
-    try:
-        rf_result = run_random_forest(payload)
-    except Exception as e:
-        rf_result = {"error": str(e)}
-        print("[ML] Random Forest failed: " + str(e), flush=True)
-
-    print("[ML] KMeans: " + str(kmeans_result), flush=True)
-    print("[ML] Isolation Forest: " + str(iso_result), flush=True)
-    print("[ML] Random Forest: " + str(rf_result), flush=True)
-
-    # store results
-    latest_sensor_data.update(payload)
-    latest_predictions.update({
-        "kmeans": kmeans_result,
-        "isolation_forest": iso_result,
-        "random_forest": rf_result
-    })
+        print("[ML] Failed: " + str(e), flush=True)
 
 def start_mqtt():
     global _client
