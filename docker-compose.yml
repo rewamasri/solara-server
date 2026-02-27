@@ -10,6 +10,7 @@ services:
   azure-sql-edge:
     image: mcr.microsoft.com/azure-sql-edge
     container_name: azure-sql-edge
+    restart: always
     environment:
       ACCEPT_EULA: "1"
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
@@ -25,3 +26,5 @@ services:
     depends_on:
       - mosquitto
       - azure-sql-edge
+    environment:
+      - DATABASE_URL=mssql+pyodbc://sa:${SA_PASSWORD}@azure-sql-edge:1433/${DB_NAME}

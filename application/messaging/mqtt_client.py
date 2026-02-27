@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from ml.inference import predict
 from api.routers.sensors import latest_sensor_data
 from api.routers.predictions import latest_predictions
+from data.database import insert_sensor_data, insert_prediction
 
 load_dotenv()
 
@@ -53,6 +54,11 @@ def on_message(client, userdata, msg):
         latest_predictions.update(result)
     except Exception as e:
         print("[ML] Failed: " + str(e), flush=True)
+        result = {}
+
+    raw_id = insert_sensor_data(payload)
+    if raw_id and result:
+        insert_prediction(raw_id, result)
 
 def start_mqtt():
     global _client
