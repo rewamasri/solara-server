@@ -18,3 +18,6 @@ topics:
 subscriber:
   data_dir: "data"
   qos: 1
+
+api:
+  url: "http://192.168.x.x:8000/sensors"  # database team's endpoint - FastAPI URL 

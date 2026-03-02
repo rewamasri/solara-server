@@ -1,12 +1,14 @@
 import paho.mqtt.client as mqtt
 import json, yaml, os
 from datetime import datetime
+import requests
 
 # NOTICE: WORKING INSIDE MQTT-SUBSCRIBER VIRTUAL ENV, NOT REGULAR VENV
 
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
+API_URL = config["api"]["url"]
 broker  = config["broker"]
 topics  = config["topics"]
 QoS     = config["subscriber"]["qos"]
@@ -35,6 +37,13 @@ def on_message(client, userdata, msg):
         json.dump(payload, f, indent=2)
 
     print(f"[SUBSCRIBER] Saved → {filepath}")
+    
+        # forward to database API (new)
+    try:
+        response = requests.post(API_URL, json=payload)
+        print(f"[SUBSCRIBER] POST {response.status_code} → {API_URL}")
+    except requests.exceptions.ConnectionError:
+        print(f"[SUBSCRIBER] Failed to reach API at {API_URL}")
 
 # CLIENT 
 client = mqtt.Client(client_id=broker["client_id"], clean_session=broker["clean_session"])

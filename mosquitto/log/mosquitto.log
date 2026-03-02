@@ -23,3 +23,4 @@
 1772411685: New client connected from 172.18.0.1:49072 as collector-pi-001 (p4, c1, k60).
 1772411747: Client collector-pi-001 [172.18.0.1:49072] disconnected.
 1772411751: Client subscriber-server-001 [172.18.0.1:44192] disconnected: connection closed by client.
+1772412884: Saving in-memory database to /mosquitto/data//mosquitto.db.
