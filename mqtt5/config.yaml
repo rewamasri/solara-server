@@ -1,7 +1,7 @@
 # config.yaml - MQTT subscriber configuration
 
 broker:
-  host: "mos1"
+  host: "localhost"
   ip: "0.0.0.0"
   port: 1883
   client_id: "subscriber-server-001"
@@ -16,4 +16,5 @@ topics:
   status:      "sensors/status"
 
 subscriber:
+  data_dir: "data"
   qos: 1

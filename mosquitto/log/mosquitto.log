@@ -1,0 +1,25 @@
+1772410955: mosquitto version 2.1.2 starting
+1772410955: Config loaded from /mosquitto/config/mosquitto.conf.
+1772410955: Bridge support available.
+1772410955: Persistence support available.
+1772410955: TLS support available.
+1772410955: TLS-PSK support available.
+1772410955: Websockets support available.
+1772410955: password-file: Error: Unable to open pwfile "/mosquitto/pwfile".
+1772410955: mosquitto version 2.1.2 terminating
+1772410955: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772411025: mosquitto version 2.1.2 starting
+1772411025: Config loaded from /mosquitto/config/mosquitto.conf.
+1772411025: Bridge support available.
+1772411025: Persistence support available.
+1772411025: TLS support available.
+1772411025: TLS-PSK support available.
+1772411025: Websockets support available.
+1772411025: Opening ipv4 listen socket on port 1883.
+1772411025: mosquitto version 2.1.2 running
+1772411663: New connection from 172.18.0.1:44192 on port 1883.
+1772411663: New client connected from 172.18.0.1:44192 as subscriber-server-001 (p4, c1, k60).
+1772411685: New connection from 172.18.0.1:49072 on port 1883.
+1772411685: New client connected from 172.18.0.1:49072 as collector-pi-001 (p4, c1, k60).
+1772411747: Client collector-pi-001 [172.18.0.1:49072] disconnected.
+1772411751: Client subscriber-server-001 [172.18.0.1:44192] disconnected: connection closed by client.
