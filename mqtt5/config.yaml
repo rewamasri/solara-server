@@ -12,6 +12,7 @@ topics:
   environment: "sensors/environment"
   light:       "sensors/light"
   thermal:     "sensors/thermal"
+  gps:         "sensors/gps"      
   all:         "sensors/all"
   status:      "sensors/status"
 

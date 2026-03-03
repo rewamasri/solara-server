@@ -24,3 +24,31 @@
 1772411747: Client collector-pi-001 [172.18.0.1:49072] disconnected.
 1772411751: Client subscriber-server-001 [172.18.0.1:44192] disconnected: connection closed by client.
 1772412884: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772414764: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772428840: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772430813: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772432811: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772434812: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772436816: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772438817: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772440814: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772442815: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772504733: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772505024: New connection from 172.18.0.1:56814 on port 1883.
+1772505024: New client connected from 172.18.0.1:56814 as subscriber-server-001 (p4, c1, k60).
+1772505025: Client subscriber-server-001 [172.18.0.1:56814] disconnected: connection closed by client.
+1772505160: New connection from 172.18.0.1:50966 on port 1883.
+1772505160: New client connected from 172.18.0.1:50966 as subscriber-server-001 (p4, c1, k60).
+1772505166: New connection from 172.18.0.1:50974 on port 1883.
+1772505166: New client connected from 172.18.0.1:50974 as collector-pi-001 (p4, c1, k60).
+1772505175: Client collector-pi-001 [172.18.0.1:50974] disconnected: connection closed by client.
+1772505181: Client subscriber-server-001 [172.18.0.1:50966] disconnected: connection closed by client.
+1772505389: New connection from 172.18.0.1:38030 on port 1883.
+1772505389: New client connected from 172.18.0.1:38030 as collector-pi-001 (p4, c1, k60).
+1772505400: Client collector-pi-001 [172.18.0.1:38030] disconnected: connection closed by client.
+1772505472: New connection from 172.18.0.1:58132 on port 1883.
+1772505472: New client connected from 172.18.0.1:58132 as subscriber-server-001 (p4, c1, k60).
+1772505473: New connection from 172.18.0.1:58138 on port 1883.
+1772505473: New client connected from 172.18.0.1:58138 as collector-pi-001 (p4, c1, k60).
+1772505477: Client subscriber-server-001 [172.18.0.1:58132] disconnected: connection closed by client.
+1772505478: Client collector-pi-001 [172.18.0.1:58138] disconnected: connection closed by client.

@@ -22,6 +22,7 @@ def on_connect(client, userdata, flags, rc):
     print(f"[SUBSCRIBER] Connected rc={rc}")
     client.subscribe(topics["all"],    qos=QoS)
     client.subscribe(topics["status"], qos=QoS)
+    client.subscribe(topics["gps"],    qos=QoS)  
 
 def on_message(client, userdata, msg):
     payload   = json.loads(msg.payload.decode())
@@ -36,14 +37,14 @@ def on_message(client, userdata, msg):
     with open(filepath, "w") as f:
         json.dump(payload, f, indent=2)
 
-    print(f"[SUBSCRIBER] Saved → {filepath}")
+    print(f"[SUBSCRIBER] Saved --> {filepath}")
     
         # forward to database API (new)
-    try:
-        response = requests.post(API_URL, json=payload)
-        print(f"[SUBSCRIBER] POST {response.status_code} → {API_URL}")
-    except requests.exceptions.ConnectionError:
-        print(f"[SUBSCRIBER] Failed to reach API at {API_URL}")
+    # try:
+    #     response = requests.post(API_URL, json=payload)
+    #     print(f"[SUBSCRIBER] POST {response.status_code} --> {API_URL}")
+    # except requests.exceptions.ConnectionError:
+    #     print(f"[SUBSCRIBER] Failed to reach API at {API_URL}")
 
 # CLIENT 
 client = mqtt.Client(client_id=broker["client_id"], clean_session=broker["clean_session"])
