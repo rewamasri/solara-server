@@ -9,12 +9,9 @@ broker:
   keepalive: 60
 
 topics:
-  environment: "sensors/environment"
-  light:       "sensors/light"
-  thermal:     "sensors/thermal"
-  gps:         "sensors/gps"      
-  all:         "sensors/all"
-  status:      "sensors/status"
+  ML:     "sensors/ML"
+  ESRI:   "sensors/ESRI"
+  status: "sensors/status"
 
 subscriber:
   data_dir: "data"
