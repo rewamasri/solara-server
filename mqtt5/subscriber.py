@@ -20,9 +20,9 @@ os.makedirs(DATA_DIR, exist_ok=True)
 # CALLBACKS 
 def on_connect(client, userdata, flags, rc):
     print(f"[SUBSCRIBER] Connected rc={rc}")
-    client.subscribe(topics["all"],    qos=QoS)
+    client.subscribe(topics["ML"],     qos=QoS)
+    client.subscribe(topics["ESRI"],   qos=QoS)
     client.subscribe(topics["status"], qos=QoS)
-    client.subscribe(topics["gps"],    qos=QoS)  
 
 def on_message(client, userdata, msg):
     payload   = json.loads(msg.payload.decode())
