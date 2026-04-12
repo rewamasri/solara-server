@@ -1,0 +1,54 @@
+1772410955: mosquitto version 2.1.2 starting
+1772410955: Config loaded from /mosquitto/config/mosquitto.conf.
+1772410955: Bridge support available.
+1772410955: Persistence support available.
+1772410955: TLS support available.
+1772410955: TLS-PSK support available.
+1772410955: Websockets support available.
+1772410955: password-file: Error: Unable to open pwfile "/mosquitto/pwfile".
+1772410955: mosquitto version 2.1.2 terminating
+1772410955: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772411025: mosquitto version 2.1.2 starting
+1772411025: Config loaded from /mosquitto/config/mosquitto.conf.
+1772411025: Bridge support available.
+1772411025: Persistence support available.
+1772411025: TLS support available.
+1772411025: TLS-PSK support available.
+1772411025: Websockets support available.
+1772411025: Opening ipv4 listen socket on port 1883.
+1772411025: mosquitto version 2.1.2 running
+1772411663: New connection from 172.18.0.1:44192 on port 1883.
+1772411663: New client connected from 172.18.0.1:44192 as subscriber-server-001 (p4, c1, k60).
+1772411685: New connection from 172.18.0.1:49072 on port 1883.
+1772411685: New client connected from 172.18.0.1:49072 as collector-pi-001 (p4, c1, k60).
+1772411747: Client collector-pi-001 [172.18.0.1:49072] disconnected.
+1772411751: Client subscriber-server-001 [172.18.0.1:44192] disconnected: connection closed by client.
+1772412884: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772414764: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772428840: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772430813: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772432811: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772434812: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772436816: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772438817: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772440814: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772442815: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772504733: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1772505024: New connection from 172.18.0.1:56814 on port 1883.
+1772505024: New client connected from 172.18.0.1:56814 as subscriber-server-001 (p4, c1, k60).
+1772505025: Client subscriber-server-001 [172.18.0.1:56814] disconnected: connection closed by client.
+1772505160: New connection from 172.18.0.1:50966 on port 1883.
+1772505160: New client connected from 172.18.0.1:50966 as subscriber-server-001 (p4, c1, k60).
+1772505166: New connection from 172.18.0.1:50974 on port 1883.
+1772505166: New client connected from 172.18.0.1:50974 as collector-pi-001 (p4, c1, k60).
+1772505175: Client collector-pi-001 [172.18.0.1:50974] disconnected: connection closed by client.
+1772505181: Client subscriber-server-001 [172.18.0.1:50966] disconnected: connection closed by client.
+1772505389: New connection from 172.18.0.1:38030 on port 1883.
+1772505389: New client connected from 172.18.0.1:38030 as collector-pi-001 (p4, c1, k60).
+1772505400: Client collector-pi-001 [172.18.0.1:38030] disconnected: connection closed by client.
+1772505472: New connection from 172.18.0.1:58132 on port 1883.
+1772505472: New client connected from 172.18.0.1:58132 as subscriber-server-001 (p4, c1, k60).
+1772505473: New connection from 172.18.0.1:58138 on port 1883.
+1772505473: New client connected from 172.18.0.1:58138 as collector-pi-001 (p4, c1, k60).
+1772505477: Client subscriber-server-001 [172.18.0.1:58132] disconnected: connection closed by client.
+1772505478: Client collector-pi-001 [172.18.0.1:58138] disconnected: connection closed by client.

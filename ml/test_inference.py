@@ -44,3 +44,25 @@ anomaly_payload = {
 
 anomaly_result = predict(anomaly_payload)
 print(anomaly_result)
+
+# testing invalid types and missing fields
+bad_payload = {
+    "latitude": "north",            # wrong type (string instead of float)
+    "longitude": None,              # missing value
+    "ambient_temp_c": "hot",        # wrong type
+    "surface_temp_avg_c": -999,     # clearly impossible
+    # "surface_temp_max_c" key missing entirely
+    "humidity_pct": -10,            # negative humidity
+    "iaq_index": "bad",             # string instead of float
+    "lux": -500,                    # negative light
+    "soil_temp_c": "cold",          # string
+    "soil_moisture_pct": 110,       # over 100%
+    "soil_ph": 0,                   # extremely acidic, unrealistic
+    "pitch_deg": 200,               # beyond normal range (-180 to 180)
+    "roll_deg": -250,               # beyond normal range
+    "battery_pct": -20,             # negative battery
+    "power_draw_w": "high"          # string instead of float
+}
+
+bad_result = predict(bad_payload)
+print(bad_result)
