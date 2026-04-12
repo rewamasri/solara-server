@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   # Database (Local Azure SQL Edge container)
   azure-sql-edge:
@@ -9,23 +10,28 @@ services:
       - MSSQL_SA_PASSWORD=YourStrongPassword123!
     ports:
       - "1433:1433"
+    networks:
+      - mosquitto
 
   # MQTT Broker (Eclipse Mosquitto)
   mosquitto:
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2
     container_name: mosquitto
     ports:
       - "1883:1883"
+      - "8883:8883"
     volumes:
-      # Ensure you create the config folder locally or this will error
       - ./infrastructure/mosquitto/config:/mosquitto/config
+      - ./infrastructure/mosquitto/data:/mosquitto/data
+      - ./infrastructure/mosquitto/log:/mosquitto/log
+    networks:
+      - mosquitto
 
   # The API / ML Service (FastAPI)
   application:
     build:
       context: .
-      # Update: changed from /docker/ to /compose/ to match your actual folder
-      dockerfile: infrastructure/compose/Dockerfile 
+      dockerfile: infrastructure/compose/Dockerfile
     container_name: fastapi-app
     depends_on:
       - azure-sql-edge
@@ -34,3 +40,10 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=mssql+pyodbc://sa:YourStrongPassword123!@azure-sql-edge:1433/master
+    networks:
+      - mosquitto
+
+networks:
+  mosquitto:
+    name: mosquitto
+    driver: bridge
