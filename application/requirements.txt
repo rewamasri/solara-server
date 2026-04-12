@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+paho-mqtt
+pyodbc
+scikit-learn
+pandas
+numpy
+python-dotenv
+joblib
+pyodbc

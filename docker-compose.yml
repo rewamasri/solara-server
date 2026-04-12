@@ -1,17 +1,5 @@
 version: '3.8'
 services:
-  # Database (Local Azure SQL Edge container)
-  azure-sql-edge:
-    image: mcr.microsoft.com/azure-sql-edge
-    container_name: azure-sql-edge
-    restart: always
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourStrongPassword123!
-    ports:
-      - "1433:1433"
-    networks:
-      - mosquitto
 
   # MQTT Broker (Eclipse Mosquitto)
   mosquitto:
@@ -19,11 +7,22 @@ services:
     container_name: mosquitto
     ports:
       - "1883:1883"
-      - "8883:8883"
+    command: mosquitto -c /mosquitto-no-auth.conf
     volumes:
       - ./infrastructure/mosquitto/config:/mosquitto/config
-      - ./infrastructure/mosquitto/data:/mosquitto/data
-      - ./infrastructure/mosquitto/log:/mosquitto/log
+    networks:
+      - mosquitto
+
+  # Database (Local Azure SQL Edge container)
+  azure-sql-edge:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: azure-sql-edge
+    restart: always
+    environment:
+      ACCEPT_EULA: "1"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
     networks:
       - mosquitto
 
@@ -34,12 +33,10 @@ services:
       dockerfile: infrastructure/compose/Dockerfile
     container_name: fastapi-app
     depends_on:
-      - azure-sql-edge
       - mosquitto
-    ports:
-      - "8000:8000"
+      - azure-sql-edge
     environment:
-      - DATABASE_URL=mssql+pyodbc://sa:YourStrongPassword123!@azure-sql-edge:1433/master
+      - DATABASE_URL=mssql+pyodbc://sa:${SA_PASSWORD}@azure-sql-edge:1433/master
     networks:
       - mosquitto
 
