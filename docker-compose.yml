@@ -1,19 +1,49 @@
-# define containers
 version: '3.8'
-
 services:
-    mosquitto:
-        image: eclipse-mosquitto:2
-        ports:
-            - 1883:1883
-            - 8883:8883
-        volumes:
-            - ./mosquitto/config:/mosquitto/config
-            - ./mosquitto/data:/mosquitto/data
-            - ./mosquitto/log:/mosquitto/log
-        networks:
-            - mosquitto
+  # Database (Local Azure SQL Edge container)
+  azure-sql-edge:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: azure-sql-edge
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrongPassword123!
+    ports:
+      - "1433:1433"
+    networks:
+      - mosquitto
+
+  # MQTT Broker (Eclipse Mosquitto)
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "8883:8883"
+    volumes:
+      - ./infrastructure/mosquitto/config:/mosquitto/config
+      - ./infrastructure/mosquitto/data:/mosquitto/data
+      - ./infrastructure/mosquitto/log:/mosquitto/log
+    networks:
+      - mosquitto
+
+  # The API / ML Service (FastAPI)
+  application:
+    build:
+      context: .
+      dockerfile: infrastructure/compose/Dockerfile
+    container_name: fastapi-app
+    depends_on:
+      - azure-sql-edge
+      - mosquitto
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mssql+pyodbc://sa:YourStrongPassword123!@azure-sql-edge:1433/master
+    networks:
+      - mosquitto
+
 networks:
-    mosquitto:
-        name: mosquitto
-        driver: bridge
+  mosquitto:
+    name: mosquitto
+    driver: bridge
