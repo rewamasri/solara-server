@@ -15,7 +15,7 @@ PASSWORD = os.getenv("SA_PASSWORD", "")
 
 def get_connection():
     conn_str = (
-        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+        f"DRIVER={{ODBC Driver 18 for SQL Server}};"
         f"SERVER={SERVER},1433;"
         f"DATABASE={DATABASE};"
         f"UID={USERNAME};"
