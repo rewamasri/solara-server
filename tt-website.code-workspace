@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../tt-website"
+		},
+		{
+			"name": "team-tech-website",
+			"path": "../tt-website/team-tech-website"
+		}
+	],
+	"settings": {}
+}
