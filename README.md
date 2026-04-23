@@ -1,3 +1,35 @@
+# Deploying and Testing:
+
+## Set Environment Variables
+```
+export SA_PASSWORD="password"
+```
+
+## First-Time Setup (from root)
+```
+docker compose -f infrastructure/compose/docker-compose.yml up -d --build
+./scripts/test_deploy.sh
+./scripts/test_pipeline.sh
+```
+
+## Normal Development (not first time)
+```
+./scripts/deploy.sh
+```
+> this pulls all new changes from the repo, sets up deployment, and runs both test scripts
+
+## Restart Containers (Without Wiping Database)
+```
+docker compose -f infrastructure/compose/docker-compose.yml down
+docker compose -f infrastructure/compose/docker-compose.yml up -d
+```
+
+## Deleting Test Data from Database
+```
+./scripts/reset_db.sh
+```
+
+**Notes:**
 JSON Payload Format
 
 i believe pramika&ava had set up a mock of what each sensor would send
