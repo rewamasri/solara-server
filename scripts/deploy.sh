@@ -22,7 +22,7 @@
 set -e
 
 echo "Pulling latest code..."
-git pull origin main
+# git pull origin main
 
 echo "Building and starting containers..."
 docker compose -f infrastructure/compose/docker-compose.yml up -d --build
@@ -32,3 +32,6 @@ sleep 5
 
 echo "Running integration tests..."
 bash scripts/test_deploy.sh
+
+echo "Running pipeline tests..."
+bash scripts/test_pipeline.sh

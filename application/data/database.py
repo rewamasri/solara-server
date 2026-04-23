@@ -5,6 +5,7 @@ import os
 import json
 import pyodbc
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -26,7 +27,14 @@ def get_connection():
 
 def insert_sensor_data(payload: dict, sensor_id: str = "rover_01") -> int:
     try:
-        conn = get_connection()
+        for attempt in range(5):
+            try:
+                conn = get_connection()
+                break
+            except Exception:
+                time.sleep(1)
+        else:
+            raise Exception("DB not ready after retries")
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO raw_sensor_data (sensor_id, json_payload) OUTPUT INSERTED.id VALUES (?, ?)",

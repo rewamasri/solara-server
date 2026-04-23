@@ -85,10 +85,10 @@ echo ""
 
 # Step 4 - check DB write
 echo "[ Step 4: Database Write ]"
+
 check "raw_sensor_data inserted into DB" \
   "docker exec fastapi-app python3 -c '
 import pyodbc
-import os
 conn = pyodbc.connect(
   \"DRIVER={ODBC Driver 18 for SQL Server};SERVER=azure-sql-edge;UID=sa;PWD=${SA_PASSWORD};TrustServerCertificate=yes\"
 )
@@ -101,16 +101,14 @@ assert row is not None
 check "predictions inserted into DB" \
   "docker exec fastapi-app python3 -c '
 import pyodbc
-import os
 conn = pyodbc.connect(
   \"DRIVER={ODBC Driver 18 for SQL Server};SERVER=azure-sql-edge;UID=sa;PWD=${SA_PASSWORD};TrustServerCertificate=yes\"
 )
 cursor = conn.cursor()
-cursor.execute(\"SELECT TOP 1 * FROM predictions ORDER BY id DESC\")
+cursor.execute(\"SELECT TOP 1 * FROM predictions ORDER BY prediction_id DESC\")
 row = cursor.fetchone()
 assert row is not None
 '"
-echo ""
 
 # Step 5 - check logs confirm success
 echo "[ Step 5: Log Confirmation ]"

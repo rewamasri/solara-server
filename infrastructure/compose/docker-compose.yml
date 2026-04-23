@@ -22,6 +22,8 @@ services:
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     ports:
       - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
     networks:
       - mosquitto
 
@@ -50,3 +52,6 @@ networks:
   mosquitto:
     name: mosquitto
     driver: bridge
+  
+volumes:
+  sql_data:
