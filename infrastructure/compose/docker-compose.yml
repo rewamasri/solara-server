@@ -1,50 +1,126 @@
-# define containers
+# # define containers
+# version: "3.9"
+
+# services:
+
+#   mosquitto:
+#     image: eclipse-mosquitto:2
+#     container_name: mosquitto
+#     ports:
+#       - "1883:1883"
+#     volumes:
+#       - ../../config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+#   db:
+#     image: mcr.microsoft.com/azure-sql-edge
+#     container_name: azure-sql-edge
+#     environment:
+#       - ACCEPT_EULA=Y
+#       - SA_PASSWORD=YourStrongPassword123!
+#     ports:
+#       - "1433:1433"
+#     volumes:
+#       - sql_data:/var/opt/mssql
+
+#   api:
+#     build:
+#       context: ../../
+#       dockerfile: infrastructure/docker/Dockerfile.api
+#     container_name: fastapi-service
+#     depends_on:
+#       - mosquitto
+#       - db
+#     ports:
+#       - "8000:8000"
+
+# volumes:
+#   sql_data:
+
+# dashboard-sync:
+#     build:
+#       context: ../../
+#       dockerfile: infrastructure/docker/Dockerfile.dashboard
+#     container_name: dashboard-sync
+#     depends_on:
+#       - db
+#     environment:
+#       - SA_PASSWORD=YourStrongPassword123!
+#       - ARCGIS_CLIENT_ID=0oLLJvxhKAMdcWTW
+#       - ARCGIS_CLIENT_SECRET=ae6c72208adf4bb38d1af2d36cb6da91
+#     restart: unless-stopped
+
 version: "3.9"
 
 services:
 
+  # MQTT Broker (Eclipse Mosquitto)
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: mosquitto
     ports:
       - "1883:1883"
+    command: mosquitto -c /mosquitto-no-auth.conf
     volumes:
-      - ../../config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./infrastructure/mosquitto/config:/mosquitto/config
+    networks:
+      - mosquitto
 
-  db:
+  # Database (Azure SQL Edge)
+  azure-sql-edge:
     image: mcr.microsoft.com/azure-sql-edge
     container_name: azure-sql-edge
+    restart: always
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourStrongPassword123!
+      ACCEPT_EULA: "1"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     ports:
       - "1433:1433"
     volumes:
       - sql_data:/var/opt/mssql
-
-  api:
-    build:
-      context: ../../
-      dockerfile: infrastructure/docker/Dockerfile.api
-    container_name: fastapi-service
-    depends_on:
+    networks:
       - mosquitto
-      - db
+
+  # FastAPI application
+  application:
+    build:
+      context: ../..
+      dockerfile: application/Dockerfile
+    container_name: fastapi-app
     ports:
       - "8000:8000"
+    depends_on:
+      - mosquitto
+      - azure-sql-edge
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      DB_HOST: azure-sql-edge
+      DB_NAME: master
+      MQTT_BROKER: mosquitto
+      MQTT_TOPIC: solara/sensors
+      DATABASE_URL: mssql+pyodbc://sa:${SA_PASSWORD}@azure-sql-edge:1433/master
+    networks:
+      - mosquitto
 
-volumes:
-  sql_data:
-
-dashboard-sync:
+  # Dashboard sync (from your branch)
+  dashboard-sync:
     build:
-      context: ../../
+      context: ../..
       dockerfile: infrastructure/docker/Dockerfile.dashboard
     container_name: dashboard-sync
     depends_on:
-      - db
+      - azure-sql-edge
     environment:
-      - SA_PASSWORD=YourStrongPassword123!
-      - ARCGIS_CLIENT_ID=0oLLJvxhKAMdcWTW
-      - ARCGIS_CLIENT_SECRET=ae6c72208adf4bb38d1af2d36cb6da91
+      SA_PASSWORD: ${SA_PASSWORD}
+      ARCGIS_CLIENT_ID:0oLLJvxhKAMdcWTW
+      ARCGIS_CLIENT_SECRET:ae6c72208adf4bb38d1af2d36cb6da91
     restart: unless-stopped
+    networks:
+      - mosquitto
+
+networks:
+  mosquitto:
+    name: mosquitto
+    driver: bridge
+
+volumes:
+  sql_data:
