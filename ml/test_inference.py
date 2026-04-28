@@ -11,7 +11,6 @@ payload = {
     "iaq_index": 86.59741961775525,
     "lux": 7077.712129758373,
     "soil_temp_c": 20.735677929836026,
-    "soil_moisture_pct": 39.900483217915166,
     "soil_ph": 7.120349543359651,
     "pitch_deg": -0.6559507995563203,
     "roll_deg": 3.3525977591851497,
@@ -33,8 +32,7 @@ anomaly_payload = {
     "humidity_pct": 0.5,              # Near zero humidity
     "iaq_index": 500.0,               # Extremely poor air
     "lux": 50000.0,                   # Extremely bright
-    "soil_temp_c": -15.0,             # Frozen soil
-    "soil_moisture_pct": 2.0,         # Extremely dry
+    "soil_temp_c": -15.0,             # Frozen soil         
     "soil_ph": 12.0,                  # Highly alkaline (almost caustic)
     "pitch_deg": 45.0,                # Steep tilt
     "roll_deg": 50.0,                 # Extreme roll
@@ -55,8 +53,7 @@ bad_payload = {
     "humidity_pct": -10,            # negative humidity
     "iaq_index": "bad",             # string instead of float
     "lux": -500,                    # negative light
-    "soil_temp_c": "cold",          # string
-    "soil_moisture_pct": 110,       # over 100%
+    "soil_temp_c": "cold",          # string    
     "soil_ph": 0,                   # extremely acidic, unrealistic
     "pitch_deg": 200,               # beyond normal range (-180 to 180)
     "roll_deg": -250,               # beyond normal range

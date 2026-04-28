@@ -90,9 +90,7 @@ print("Scaling Test Passed!!")
 
 #health rules (subject to change)
 def label_health(row):
-    if row["soil_moisture_pct"] < 0.3:
-        return "Needs watering"
-    elif row["surface_temp_max_c"] > 0.8:
+    if row["surface_temp_max_c"] > 0.8:
         return "Heat stress"
     elif row["soil_ph"] < 0.4 or row["soil_ph"] > 0.7:
         return "pH issue"
@@ -102,7 +100,6 @@ def label_health(row):
 df_scaled["health_status"] = df_scaled.apply(label_health, axis=1)
 
 #adding extra "noise" to take into account imperfect sensors
-df_scaled["soil_moisture_pct"] += np.random.normal(0, 0.05, len(df_scaled))
 df_scaled["surface_temp_max_c"] += np.random.normal(0, 0.05, len(df_scaled))
 
 
