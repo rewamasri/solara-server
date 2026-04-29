@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   # MQTT Broker (Eclipse Mosquitto)
@@ -14,7 +12,7 @@ services:
     networks:
       - mosquitto
 
-  # Database (Azure SQL Edge)
+  # Database (Local Azure SQL Edge container)
   azure-sql-edge:
     image: mcr.microsoft.com/azure-sql-edge
     container_name: azure-sql-edge
@@ -29,7 +27,7 @@ services:
     networks:
       - mosquitto
 
-  # FastAPI application
+  # The API / ML Service (FastAPI)
   application:
     build:
       context: ../..
@@ -50,7 +48,7 @@ services:
     networks:
       - mosquitto
 
-  # Dashboard sync (from your branch)
+    # Dashboard sync (from your branch)
   dashboard-sync:
     build:
       context: ../..
@@ -71,6 +69,6 @@ networks:
   mosquitto:
     name: mosquitto
     driver: bridge
-    
+  
 volumes:
   sql_data:
