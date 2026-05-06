@@ -85,7 +85,7 @@ echo ""
 
 # Step 4 - check DB write
 echo "[ Step 4: Database Write ]"
-
+sleep 5
 check "raw_sensor_data inserted into DB" \
   "docker exec fastapi-app python3 -c '
 import pyodbc

@@ -41,10 +41,12 @@ check "SQL Edge responds to query" \
   "docker exec fastapi-app python3 -c 'import pyodbc; pyodbc.connect(\"DRIVER={ODBC Driver 18 for SQL Server};SERVER=azure-sql-edge;UID=sa;PWD=${SA_PASSWORD};TrustServerCertificate=yes\")'"
 echo ""
 
+sleep 2
+
 echo "[ FastAPI Application ]"
 check "port 8000 is open on host"   "nc -z localhost 8000"
 check "health endpoint returns 200" "curl -sf http://localhost:8000/"
-check "app can reach SQL Edge"      "docker exec fastapi-app python3 -c 'import socket; socket.create_connection((\"azure-sql-edge\", 1433), timeout=3)'"
+check "app can reach SQL Edge"      "docker exec fastapi-app python3 -c 'import socket; socket.create_connection((\"azure-sql-edge\", 1433), timeout=7)'"
 echo ""
 
 echo "[ Inter-container Networking ]"

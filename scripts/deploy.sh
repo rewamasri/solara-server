@@ -28,7 +28,7 @@ echo "Building and starting containers..."
 docker compose -f infrastructure/compose/docker-compose.yml up -d --build
 
 echo "Waiting for containers to initialise..."
-sleep 5
+sleep 10
 
 echo "Running integration tests..."
 bash scripts/test_deploy.sh
