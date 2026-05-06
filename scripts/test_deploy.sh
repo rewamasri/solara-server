@@ -55,9 +55,20 @@ check "fastapi-app can reach azure-sql-edge by name" "docker exec fastapi-app py
 check "azure-sql-edge can reach mosquitto by name"   "docker exec azure-sql-edge bash -c 'echo > /dev/tcp/mosquitto/1883'"
 echo ""
 
+echo "[ Dashboard Sync ]"
+check "dashboard-sync is running" \
+  "docker ps --filter name=dashboard-sync --filter status=running | grep dashboard-sync"
+check "dashboard-sync can reach azure-sql-edge" \
+  "docker exec dashboard-sync python3 -c 'import socket; socket.create_connection((\"azure-sql-edge\", 1433), timeout=3)'"
+check "dashboard-sync can reach ArcGIS" \
+  "docker exec dashboard-sync python3 -c 'import urllib.request; urllib.request.urlopen(\"https://ucr.maps.arcgis.com\", timeout=5)'"
+echo ""
+
 echo "=============================="
 echo "  Results: ${PASS} passed, ${FAIL} failed"
 echo "=============================="
 echo ""
+
+
 
 [ $FAIL -eq 0 ] && exit 0 || exit 1

@@ -118,9 +118,51 @@ check "ML result log present" \
   "docker logs fastapi-app 2>&1 | grep '\[ML\] Result'"
 echo ""
 
+# Step 6 - Dashboard Sync
+echo "[ Step 6: Dashboard Sync ]"
+
+check "dashboard-sync container is running" \
+  "docker ps --filter name=dashboard-sync --filter status=running | grep dashboard-sync"
+
+check "dashboard can reach azure-sql-edge by name" \
+  "docker exec dashboard-sync python3 -c 'import socket; socket.create_connection((\"azure-sql-edge\", 1433), timeout=3)'"
+
+check "dashboard can reach ArcGIS" \
+  "docker exec dashboard-sync python3 -c 'import urllib.request; urllib.request.urlopen(\"https://ucr.maps.arcgis.com\", timeout=5)'"
+
+check "dashboard DB has sensor data to sync" \
+  "docker exec fastapi-app python3 -c '
+import pyodbc
+conn = pyodbc.connect(
+  \"DRIVER={ODBC Driver 18 for SQL Server};SERVER=azure-sql-edge;UID=sa;PWD=${SA_PASSWORD};TrustServerCertificate=yes\"
+)
+cursor = conn.cursor()
+cursor.execute(\"SELECT COUNT(*) FROM raw_sensor_data\")
+count = cursor.fetchone()[0]
+assert count > 0, f\"No sensor data found: {count} rows\"
+'"
+
+check "dashboard DB has predictions to sync" \
+  "docker exec fastapi-app python3 -c '
+import pyodbc
+conn = pyodbc.connect(
+  \"DRIVER={ODBC Driver 18 for SQL Server};SERVER=azure-sql-edge;UID=sa;PWD=${SA_PASSWORD};TrustServerCertificate=yes\"
+)
+cursor = conn.cursor()
+cursor.execute(\"SELECT COUNT(*) FROM predictions\")
+count = cursor.fetchone()[0]
+assert count > 0, f\"No predictions found: {count} rows\"
+'"
+
+check "dashboard sync runs without error" \
+  "docker exec dashboard-sync python3 dashboard.py"
+
+echo ""
+
 echo "=============================="
 echo "  Results: ${PASS} passed, ${FAIL} failed"
 echo "=============================="
 echo ""
 
 [ $FAIL -eq 0 ] && exit 0 || exit 1
+
