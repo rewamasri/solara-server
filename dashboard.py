@@ -2,25 +2,43 @@ from arcgis.gis import GIS
 from arcgis.features import FeatureLayer, Feature
 import sqlite3
 import pandas as pd
+import pyodbc
+import os
 
 # 1. AUTH
 gis = GIS("https://ucr.maps.arcgis.com", client_id="ZvGniMfMxSg54T2T", client_secret="0ae338c02ccf4a9f8f1916dc80e566ff")
 
-def push_data_to_esri(db_path, layer_url, table_name):
-    # 1. Pull data from SQLite
+# def push_data_to_esri(db_path, layer_url, table_name):
+#     # 1. Pull data from SQLite
+#     try:
+#         conn = sqlite3.connect(db_path)
+#         query = f"SELECT * FROM {table_name} WHERE timestamp >= datetime('now', '-24 hours')"
+#         df = pd.read_sql_query(query, conn)
+#         conn.close()
+#         print(f"📦 Pulled {len(df)} rows from {table_name}")
+
+#         if df.empty:
+#             print(f"⚠️  No recent data, falling back to all data...")
+#             conn = sqlite3.connect(db_path)
+#             df = pd.read_sql_query(f"SELECT * FROM {table_name} LIMIT 10", conn)
+#             conn.close()
+#             print(f"📦 Pulled {len(df)} rows (fallback)")
+#     except Exception as e:
+#         print(f"❌ Database error: {e}")
+#         return
+def push_data_to_esri(layer_url, table_name):
     try:
-        conn = sqlite3.connect(db_path)
-        query = f"SELECT * FROM {table_name} WHERE timestamp >= datetime('now', '-24 hours')"
-        df = pd.read_sql_query(query, conn)
+        conn = pyodbc.connect(
+            f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+            f"SERVER=azure-sql-edge;"
+            f"UID=sa;"
+            f"PWD={os.environ['SA_PASSWORD']};"
+            f"TrustServerCertificate=yes"
+        )
+        query = f"SELECT TOP 100 * FROM {table_name} ORDER BY id DESC"
+        df = pd.read_sql(query, conn)
         conn.close()
         print(f"📦 Pulled {len(df)} rows from {table_name}")
-
-        if df.empty:
-            print(f"⚠️  No recent data, falling back to all data...")
-            conn = sqlite3.connect(db_path)
-            df = pd.read_sql_query(f"SELECT * FROM {table_name} LIMIT 10", conn)
-            conn.close()
-            print(f"📦 Pulled {len(df)} rows (fallback)")
     except Exception as e:
         print(f"❌ Database error: {e}")
         return
@@ -109,8 +127,10 @@ print("="*60)
 print("SYNCING DATA TO ESRI FEATURE LAYERS")
 print("="*60)
 
-push_data_to_esri(DB_PATH, sensor_layer_url, "sensor_readings")
-push_data_to_esri(DB_PATH, ml_layer_url, "recommendations")
+# push_data_to_esri(DB_PATH, sensor_layer_url, "sensor_readings")
+# push_data_to_esri(DB_PATH, ml_layer_url, "recommendations")
+push_data_to_esri(sensor_layer_url, "raw_sensor_data")
+push_data_to_esri(ml_layer_url, "predictions")
 
 print("="*60)
 print("✓ SYNC COMPLETE")
