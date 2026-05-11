@@ -48,6 +48,23 @@ services:
     networks:
       - mosquitto
 
+    # Dashboard sync (from your branch)
+  dashboard-sync:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.dashboard
+    container_name: dashboard-sync
+    depends_on:
+      - azure-sql-edge
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ARCGIS_CLIENT_ID=${ARCGIS_CLIENT_ID}
+      - ARCGIS_CLIENT_SECRET=${ARCGIS_CLIENT_SECRET}
+    restart: unless-stopped
+
+    networks:
+      - mosquitto
+
 networks:
   mosquitto:
     name: mosquitto
