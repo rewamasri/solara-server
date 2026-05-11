@@ -18,36 +18,33 @@ DATA_DIR = config["subscriber"]["data_dir"]
 os.makedirs(DATA_DIR, exist_ok=True)
 
 # CALLBACKS 
-def on_connect(client, userdata, flags, rc):
-    print(f"[SUBSCRIBER] Connected rc={rc}")
-    client.subscribe(topics["ML"],     qos=QoS)
-    client.subscribe(topics["ESRI"],   qos=QoS)
-    client.subscribe(topics["status"], qos=QoS)
+def on_connect(client, userdata, flags, reason_code, properties):
+    print(f"[SUBSCRIBER] Connected rc={reason_code}")
+    result1 = client.subscribe(topics["ML"],     qos=QoS)
+    result2 = client.subscribe(topics["ESRI"],   qos=QoS)
+    result3 = client.subscribe(topics["status"], qos=QoS)
+    print(f"[SUBSCRIBER] Subscribe results: {result1}, {result2}, {result3}")
 
 def on_message(client, userdata, msg):
-    payload   = json.loads(msg.payload.decode())
+    try:
+        payload   = json.loads(msg.payload.decode())
+    except json.JSONDecodeError as e:
+        print(f"[SUBSCRIBER] Bad JSON on {msg.topic}: {e}")
+        return
     timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H-%M-%SZ")
-
-    # filename: topic levels joined with "_" + timestamp
-    # e.g. sensors_all_2025-01-01T00-00-00Z.json
     topic_slug = msg.topic.replace("/", "_")
     filename   = f"{topic_slug}_{timestamp}.json"
     filepath   = os.path.join(DATA_DIR, filename)
-
     with open(filepath, "w") as f:
         json.dump(payload, f, indent=2)
-
     print(f"[SUBSCRIBER] Saved --> {filepath}")
-    
-        # forward to database API (new)
-    # try:
-    #     response = requests.post(API_URL, json=payload)
-    #     print(f"[SUBSCRIBER] POST {response.status_code} --> {API_URL}")
-    # except requests.exceptions.ConnectionError:
-    #     print(f"[SUBSCRIBER] Failed to reach API at {API_URL}")
 
 # CLIENT 
-client = mqtt.Client(client_id=broker["client_id"], clean_session=broker["clean_session"])
+client = mqtt.Client(
+    callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
+    client_id=broker["client_id"],
+    clean_session=broker["clean_session"]
+)
 client.on_connect = on_connect
 client.on_message = on_message
 
