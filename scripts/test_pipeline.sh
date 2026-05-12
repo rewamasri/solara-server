@@ -155,7 +155,7 @@ assert count > 0, f\"No predictions found: {count} rows\"
 '"
 
 check "dashboard sync runs without error" \
-  "docker exec dashboard-sync python3 dashboard.py"
+  "docker logs dashboard-sync 2>&1 | grep '✓ SYNC COMPLETE'"
 
 echo ""
 

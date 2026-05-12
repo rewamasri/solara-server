@@ -4,10 +4,10 @@ sys.path.append("/app")
 import os
 import json
 import pyodbc
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import time
 
-load_dotenv()
+#load_dotenv()
 
 SERVER = os.getenv("DB_HOST", "azure-sql-edge")
 DATABASE = os.getenv("DB_NAME", "master")
@@ -27,12 +27,12 @@ def get_connection():
 
 def insert_sensor_data(payload: dict, sensor_id: str = "rover_01") -> int:
     try:
-        for attempt in range(5):
+        for attempt in range(10):
             try:
                 conn = get_connection()
                 break
             except Exception:
-                time.sleep(1)
+                time.sleep(5)
         else:
             raise Exception("DB not ready after retries")
         cursor = conn.cursor()
@@ -50,9 +50,34 @@ def insert_sensor_data(payload: dict, sensor_id: str = "rover_01") -> int:
         print("[DB] Failed to insert sensor data: " + str(e), flush=True)
         return None
 
+# def insert_prediction(raw_data_id: int, prediction: dict) -> None:
+#     try:
+#         conn = get_connection()
+#         cursor = conn.cursor()
+#         prediction_value = 1.0 if prediction.get("is_anomaly") else 0.0
+#         model_version = "1.0"
+#         cursor.execute(
+#             "INSERT INTO predictions (raw_data_id, prediction_value, model_version) VALUES (?, ?, ?)",
+#             raw_data_id,
+#             prediction_value,
+#             model_version
+#         )
+#         conn.commit()
+#         conn.close()
+#         print("[DB] Inserted prediction for raw_data_id: " + str(raw_data_id), flush=True)
+#     except Exception as e:
+#         print("[DB] Failed to insert prediction: " + str(e), flush=True)
+
 def insert_prediction(raw_data_id: int, prediction: dict) -> None:
     try:
-        conn = get_connection()
+        for attempt in range(10):
+            try:
+                conn = get_connection()
+                break
+            except Exception:
+                time.sleep(5)
+        else:
+            raise Exception("DB not ready after retries")
         cursor = conn.cursor()
         prediction_value = 1.0 if prediction.get("is_anomaly") else 0.0
         model_version = "1.0"
@@ -67,3 +92,4 @@ def insert_prediction(raw_data_id: int, prediction: dict) -> None:
         print("[DB] Inserted prediction for raw_data_id: " + str(raw_data_id), flush=True)
     except Exception as e:
         print("[DB] Failed to insert prediction: " + str(e), flush=True)
+
