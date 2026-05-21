@@ -3,6 +3,8 @@
 ## Set Environment Variables
 ```
 export SA_PASSWORD="password"
+export ARCGIS_CLIENT_SECRET="secret"
+export ARCGIS_CLIENT_ID="id"
 ```
 
 ## First-Time Setup (from root)
